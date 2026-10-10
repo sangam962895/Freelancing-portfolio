@@ -1,0 +1,35 @@
+# Dependencies and build output
+node_modules/
+dist/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Private documents: never commit these
+private/
+*.receipt.*
+*receipt*
+*invoice*
+*payment*
+*transaction*
+*identity*
+*passport*
+*aadhaar*
+*pan_card*
+*.unredacted.*
+
+# Raw working files and drafts
+drafts/
+*.tmp
+*.bak
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Editor files
+.vscode/
+.idea/
