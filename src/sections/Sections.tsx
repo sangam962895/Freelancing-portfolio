@@ -12,41 +12,12 @@ import { paymentProofFiles } from '../data/portfolio';
 export function Home() {
   const githubLink = profile.links.find((l) => l.label === 'GitHub');
   const socialLinks = profile.links.filter((l) => l.label !== 'GitHub');
-  const [typedTitle, setTypedTitle] = useState('');
-
-  useEffect(() => {
-    let index = 0;
-    let timeout: number | undefined;
-
-    const tick = () => {
-      setTypedTitle(profile.title.slice(0, index + 1));
-      index += 1;
-
-      if (index < profile.title.length) {
-        timeout = window.setTimeout(tick, 90);
-      } else {
-        timeout = window.setTimeout(() => {
-          setTypedTitle('');
-          index = 0;
-          timeout = window.setTimeout(tick, 200);
-        }, 1400);
-      }
-    };
-
-    timeout = window.setTimeout(tick, 200);
-    return () => {
-      if (timeout) window.clearTimeout(timeout);
-    };
-  }, []);
 
   return (
     <section id="home" className="hero" aria-labelledby="hero-name">
       <div className="container hero-grid">
         <div className="hero-text">
-          <p className="eyebrow typewriter" aria-live="polite">
-            <span>{typedTitle}</span>
-            <span className="typewriter-cursor" aria-hidden="true">|</span>
-          </p>
+          <p className="eyebrow">{profile.title}</p>
           <h1 id="hero-name">{profile.name}</h1>
           <p className="lead">{profile.headline}</p>
           <p>{profile.intro}</p>

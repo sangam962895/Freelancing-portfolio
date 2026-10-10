@@ -54,14 +54,6 @@ li + li { margin-top: 0.35rem; }
 .section:nth-of-type(even) { background: var(--bg-2); }
 .section-head { margin-bottom: 2rem; }
 .eyebrow { color: var(--accent); font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; margin-bottom: 0.4rem; }
-.typewriter {
-  display: inline-flex; align-items: center; min-height: 1.2em; white-space: nowrap; overflow: hidden;
-  font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace; letter-spacing: 0.1em;
-}
-.typewriter-cursor {
-  display: inline-block; color: var(--accent); margin-left: 0.12rem; animation: typewriter-blink 0.8s steps(1) infinite;
-}
-@keyframes typewriter-blink { 50% { opacity: 0; } }
 .group-title { margin: 2rem 0 1rem; color: #cfe3f7; }
 
 /* Header and navigation */
