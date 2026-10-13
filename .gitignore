@@ -33,3 +33,7 @@ desktop.ini
 # Editor files
 .vscode/
 .idea/
+
+# Allow the redacted payment proof PDFs used by the website
+!public/assets/payments/
+!public/assets/payments/payment-*.pdf
