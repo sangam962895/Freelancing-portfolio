@@ -286,7 +286,6 @@ export interface Education {
   specialization?: string;
   period: string;
   status: string;
-  coursework?: string[];
 }
 
 export const education: Education[] = [
@@ -295,8 +294,7 @@ export const education: Education[] = [
     institution: 'Noida Institute of Engineering and Technology, Greater Noida, Uttar Pradesh',
     specialization: 'Data Science',
     period: 'Nov 2022 to 2026',
-    status: 'Graduated 2026 (CGPA 7.25) [CONFIRM graduation status]',
-    coursework: ['[CONFIRM relevant coursework]'],
+    status: 'Graduated 2026 (CGPA 7.25)',
   },
   {
     degree: 'Intermediate',

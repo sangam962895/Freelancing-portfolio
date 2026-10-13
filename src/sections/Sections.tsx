@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useState, type ReactNode } from 'react';
 import {
   profile, aboutMe, skillGroups, freelanceExperience, internship, projects,
   paidProof, education, certifications, academicAchievements, contactOptions,
@@ -7,6 +7,8 @@ import { asset, isPlaceholder, Section, SafeLink, Tags } from '../utils';
 import ProjectCard from '../components/ProjectCard';
 import ContactForm from '../components/ContactForm';
 import { paymentProofFiles } from '../data/portfolio';
+
+const PdfPreview = lazy(() => import('../components/PdfPreview'));
 
 /* 1. Home */
 export function Home() {
@@ -226,7 +228,6 @@ export function Education() {
             <h3>{e.degree}{e.specialization ? `, ${e.specialization}` : ''}</h3>
             <p className="muted">{e.institution} · {e.period}</p>
             <p>{e.status}</p>
-            {e.coursework && <p><strong>Coursework:</strong> {e.coursework.join(', ')}</p>}
           </li>
         ))}
       </ol>
@@ -234,36 +235,11 @@ export function Education() {
   );
 }
 
-/* Reusable PDF card: View / Hide panel plus Open in new tab. The PDF is checked only
-   when the panel is opened, so missing files cause no console errors on page load. */
+/* Reusable PDF card: preview assets are requested only after the panel is opened. */
 function PdfCard({ title, meta, path, footer }: { title: string; meta?: string; path: string; footer?: ReactNode }) {
   const [showPanel, setShowPanel] = useState(false);
-  const [fileReady, setFileReady] = useState(false);
-  const [checked, setChecked] = useState(false);
   const panelId = `pdf-panel-${path.replace(/\W+/g, '-')}`;
   const file = asset(path);
-  const fileName = path.split('/').pop();
-  const folder = path.split('/').slice(0, -1).join('/');
-
-  useEffect(() => {
-    if (!showPanel || checked) return;
-    const ctrl = new AbortController();
-    const checkFile = async () => {
-      try {
-        let response = await fetch(file, { method: 'HEAD', signal: ctrl.signal });
-        if (!response.ok) {
-          response = await fetch(file, { signal: ctrl.signal });
-        }
-        setFileReady(response.ok && (response.headers.get('content-type') || '').includes('pdf'));
-      } catch {
-        setFileReady(false);
-      } finally {
-        setChecked(true);
-      }
-    };
-    checkFile();
-    return () => ctrl.abort();
-  }, [showPanel, checked, file]);
 
   return (
     <article className="card">
@@ -273,21 +249,13 @@ function PdfCard({ title, meta, path, footer }: { title: string; meta?: string; 
         <button type="button" className="btn btn-primary" aria-expanded={showPanel} aria-controls={panelId} onClick={() => setShowPanel((v) => !v)}>
           {showPanel ? 'Hide' : 'View'}
         </button>
-        {fileReady ? (
-          <a className="btn btn-ghost" href={file} target="_blank" rel="noopener noreferrer">Open in new tab</a>
-        ) : (
-          <button type="button" className="btn btn-ghost" onClick={() => setShowPanel(true)}>Open in new tab</button>
-        )}
+        <a className="btn btn-ghost" href={file} target="_blank" rel="noopener noreferrer">Open in new tab</a>
       </div>
       {showPanel && (
         <div id={panelId} className="cert-panel">
-          {fileReady ? (
-            <iframe className="cert-viewer" src={file} title={`${title} PDF`} />
-          ) : (
-            <p className="muted">
-              PDF not added yet. Save the file as <strong>{fileName}</strong> in <code>public/{folder}/</code>, then refresh this page.
-            </p>
-          )}
+          <Suspense fallback={<p className="pdf-preview-loading" role="status">Loading PDF preview…</p>}>
+            <PdfPreview src={file} title={title} />
+          </Suspense>
         </div>
       )}
       {footer}

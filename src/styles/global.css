@@ -222,10 +222,22 @@ figcaption { color: var(--muted); font-size: 0.92rem; }
   .site-nav .nav-dropdown-toggle { min-width: 28px; min-height: 28px; font-size: 0.8rem; }
 }
 
-/* Certificate viewer (shown only after the View button is pressed) */
-.cert-viewer { display: block; width: 100%; height: min(70vh, 560px); margin-top: 1rem; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
-
+/* PDF pages are rendered to canvases; only nearby pages are kept mounted. */
 .cert-panel { margin-top: 1rem; }
+.pdf-preview { display: grid; gap: 1rem; min-width: 0; }
+.pdf-preview-loading, .pdf-preview-error { margin: 0; padding: 1rem; overflow-wrap: anywhere; }
+.pdf-preview-loading { color: var(--muted); }
+.pdf-preview-error { color: #fca5a5; }
+.pdf-page {
+  position: relative; width: 100%; max-width: 100%; margin-inline: auto; overflow: hidden;
+  border: 1px solid var(--border); border-radius: 10px; background: #fff;
+}
+.pdf-page-canvas { display: block; width: 100%; height: auto; }
+.pdf-page-placeholder { position: absolute; inset: 0; background: #fff; }
+.pdf-page-status {
+  position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 1rem;
+  color: #334155; background: rgba(255, 255, 255, 0.88); text-align: center;
+}
 
 /* Contact form */
 .contact-form { display: grid; gap: 0.9rem; }
