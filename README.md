@@ -56,7 +56,7 @@ The site reads `public/assets/github-stats.json`, which is generated from the Gi
 
 ### EmailJS contact form (.env)
 
-The contact form reads three PUBLIC values from a `.env` file in the project root:
+The contact form reads three public values from a `.env` file in the project root. Create the file if it does not exist:
 
 ```
 VITE_EMAILJS_SERVICE_ID=service_xxxxxxx
@@ -64,7 +64,7 @@ VITE_EMAILJS_TEMPLATE_ID=template_xxxxxxx
 VITE_EMAILJS_PUBLIC_KEY=your_public_key
 ```
 
-- Start from `.env.example`, copy it to `.env`, and fill in the values.
+- Fill in the values from your EmailJS account.
 - Restart `npm run dev` (or rebuild) after changing `.env`. Vite reads it only at startup and build time.
 - **Never put the EmailJS Private Key in `.env` or anywhere in the site.** Anything in the browser build is visible to every visitor.
 - `.env` is listed in `.gitignore`, so it won't be pushed to GitHub. Set the same three values as repository secrets if you deploy with GitHub Actions.

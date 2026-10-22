@@ -359,7 +359,7 @@ export const contactOptions = [
 ];
 
 // EmailJS settings for the contact form. Create a free account at emailjs.com, add an
-// email service, and create a template with variables: from_name, reply_to, subject, message.
+// email service, and create a template with variables: from_name, reply_to, subject, message, to_name.
 // The public key is designed for browser use. Never put a private key or password here.
 // Until all three values are filled in, the site shows the email link instead of a form.
 // Values come from the .env file (VITE_EMAILJS_* keys). Only PUBLIC values belong there.

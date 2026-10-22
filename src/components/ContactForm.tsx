@@ -1,4 +1,5 @@
-import { useState, type FormEvent } from 'react';
+import emailjs from '@emailjs/browser';
+import { useRef, useState, type FormEvent } from 'react';
 import { emailJs, emailJsReady, profile } from '../data/portfolio';
 
 type Status =
@@ -13,9 +14,12 @@ type FieldErrors = Partial<Record<'name' | 'email' | 'message', string>>;
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
   const [errors, setErrors] = useState<FieldErrors>({});
+  const sendingRef = useRef(false);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (sendingRef.current) return;
+
     const form = e.currentTarget;
     const data = new FormData(form);
     const name = String(data.get('name') ?? '').trim();
@@ -33,8 +37,6 @@ export default function ContactForm() {
     setErrors(found);
     if (Object.keys(found).length > 0) return;
 
-    // Not connected to EmailJS yet: open the visitor's email app with the message filled in.
-    // Nothing is claimed as sent in this case.
     if (!emailJsReady) {
       const body = `${message}\n\n— ${name} (${email})`;
       const mailtoUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(profile.email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -43,19 +45,15 @@ export default function ContactForm() {
       return;
     }
 
+    sendingRef.current = true;
     setStatus({ kind: 'sending' });
     try {
-      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          service_id: emailJs.serviceId,
-          template_id: emailJs.templateId,
-          user_id: emailJs.publicKey,
-          template_params: { from_name: name, reply_to: email, subject, message, to_name: profile.name },
-        }),
-      });
-      if (!res.ok) throw new Error(`EmailJS responded with ${res.status}`);
+      await emailjs.send(
+        emailJs.serviceId,
+        emailJs.templateId,
+        { from_name: name, reply_to: email, subject, message, to_name: profile.name },
+        { publicKey: emailJs.publicKey },
+      );
       form.reset();
       setStatus({ kind: 'sent' });
     } catch {
@@ -63,6 +61,8 @@ export default function ContactForm() {
         kind: 'error',
         message: 'Your message could not be sent. Please try again, or email me directly.',
       });
+    } finally {
+      sendingRef.current = false;
     }
   }
 
