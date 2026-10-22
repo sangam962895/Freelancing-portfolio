@@ -265,7 +265,7 @@ export interface PaidProofItem {
 // transaction records are NOT published because they contain IDs, a tax number,
 // phone, email, and home address. Remove this entry to hide the section.
 // Each slug maps to public/assets/payments/<slug>.pdf. Use REDACTED copies only.
-export const paymentProofFiles: string[] = ['payment-1', 'payment-2'];
+export const paymentProofFiles: string[] = ['payment-1', 'payment-2', 'pement-3'];
 
 export const paidProof: PaidProofItem[] = [
   {

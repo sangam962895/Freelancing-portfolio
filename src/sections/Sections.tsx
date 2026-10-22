@@ -194,6 +194,21 @@ export function Experience() {
 }
 
 /* 8. Paid Work Proof: hidden automatically when there is no approved evidence */
+const paymentProofDetails: Record<string, { title: string; meta: string }> = {
+  'payment-1': {
+    title: 'CrowdGen Payment Receipt',
+    meta: 'Productivity transaction receipt showing a gross amount of $19.68 USD.',
+  },
+  'payment-2': {
+    title: 'CrowdGen Invoice Summary',
+    meta: 'Invoice dated October 7, 2026, for $52.11 USD; status is ready for payout.',
+  },
+  'pement-3': {
+    title: 'Freelancing Payment Proof',
+    meta: 'Freelancing earnings dashboard showing $780 total paid.',
+  },
+};
+
 export function PaidProof() {
   if (paidProof.length === 0) return null;
   return (
@@ -210,9 +225,17 @@ export function PaidProof() {
       </div>
       <h3 className="group-title">Payment proof files</h3>
       <div className="grid-2">
-        {paymentProofFiles.map((slug, i) => (
-          <PdfCard key={slug} title={`Payment proof ${i + 1}`} path={`assets/payments/${slug}.pdf`} />
-        ))}
+        {paymentProofFiles.map((slug, i) => {
+          const details = paymentProofDetails[slug];
+          return (
+            <PdfCard
+              key={slug}
+              title={details?.title ?? `Payment proof ${i + 1}`}
+              meta={details?.meta}
+              path={`assets/payments/${slug}.pdf`}
+            />
+          );
+        })}
       </div>
     </Section>
   );
